@@ -80,9 +80,9 @@ void setup() {
 }
 
 void loop() {
-  int randomXRotation = random(5, 90);
+  int randomXRotation = random(70, 90);
   stepperX.rotate(randomXRotation);
-  int randomYRotation = random(5, 90);
+  int randomYRotation = random(300, 360);
   stepperY.rotate(randomYRotation);
   delay(1);
 }

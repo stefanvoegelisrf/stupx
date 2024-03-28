@@ -161,3 +161,23 @@ void loop() {
   angle += speed;
 }
 ```
+
+
+## 28.03.2024
+
+### Rhino intro
+
+#### Commands
+We are interacting with a command interface and can interact with it by typing commands
+
+#### Relative coordinates
+
+#### CurveBoolean to combine curves
+
+#### Trim
+
+#### Join
+
+#### Selection
+
+#### Fingerzinkenverbindung
