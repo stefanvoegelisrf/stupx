@@ -163,8 +163,6 @@ void loop() {
 ```
 
 
-## 28.03.2024
-
 ### Rhino intro
 
 #### Commands
@@ -180,4 +178,16 @@ We are interacting with a command interface and can interact with it by typing c
 
 #### Selection
 
+#### https://wiki.mcneel.com/rhino/pictureframes
+
+#### Diameter
+
 #### Fingerzinkenverbindung
+
+https://www.bastelgarage.ch/optischer-endschalter-lichtschranke-mit-kabel
+
+### Creating gears
+
+https://hessmer.org/gears/InvoluteSpurGearBuilder.html?circularPitch=4.71238898038469&pressureAngle=20&clearance=0.05&backlash=0.05&profileShift=0&gear1ToothCount=64&gear1CenterHoleDiamater=3&gear2ToothCount=32&gear2CenterHoleDiamater=3&showOption=3&gear1PitchCircleDiameter=20
+
+### Motiongen
