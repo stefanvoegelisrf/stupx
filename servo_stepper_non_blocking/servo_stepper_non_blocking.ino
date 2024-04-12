@@ -21,7 +21,6 @@
 
 #include <Arduino.h>
 #include "BasicStepperDriver.h"
-#include <Servo.h>
 
 // Motor steps per revolution. Most steppers are 200 steps or 1.8 degrees/step
 #define MOTOR_STEPS 200
@@ -47,83 +46,47 @@
 // Define the pin for enable/disable functionality
 #define SLEEP 8
 
-Servo servo;
-
-const byte servoPin = 12;  // connect to Spindle enable pin (SpinEn) on CNC shield.
-int pos = 90;
-float speed = .1;
-
-const int servo_min_ms = 800;
-const int servo_max_ms = 2100;
-
-const int servo_min_pos = 55;
-const int servo_max_pos = 135;
-const int servo_range = servo_max_pos - servo_min_pos;
 
 const float full_rotation_L = MOTOR_STEPS * MICROSTEPS * 14;
-const int step_size = 360;
 
 // Initialize the driver(s)
-BasicStepperDriver stepper(MOTOR_STEPS, DIR_X, STEP_X, SLEEP);
+BasicStepperDriver stepperX(MOTOR_STEPS, DIR_X, STEP_X, SLEEP);
+BasicStepperDriver stepperY(MOTOR_STEPS, DIR_Y, STEP_Y, SLEEP);
 
 void setup() {
 
   Serial.begin(115200);
-  Serial.println("Booting Plotter ... Fasten your seatbelts! ");
-  Serial.println("");
-  Serial.println(" ____ _____ _   _ ____  ____   ___   __  __");
-  Serial.println("/ ___|_   _| | | |  _ \\|  _ \\ / _ \\  \\ \\/ /");
-  Serial.println("\\___ \\ | | | | | | |_) | |_) | | | |  \\  /");
-  Serial.println(" ___) || | | |_| |  __/|  _ <| |_| |  /  \\");
-  Serial.println("|____/ |_|  \\___/|_|   |_| \\_\\\\___/  /_/\\_\\");
-  Serial.println("");
-
   // Pass some config to the instances and begin
-  stepper.begin(RPM, MICROSTEPS);
+  stepperX.begin(RPM, MICROSTEPS);
+  stepperY.begin(RPM, MICROSTEPS);
 
   // if using enable/disable on ENABLE pin (active LOW) instead of SLEEP uncomment next line
-  stepper.setEnableActiveState(LOW);
+  stepperX.setEnableActiveState(LOW);
+  stepperY.setEnableActiveState(LOW);
 
   // attach the servo
-  servo.attach(servoPin);
   // energize coils
-  stepper.enable();
-
-  servo.write(pos);
+  stepperX.enable();
+  stepperY.enable();
 }
 
-int stepperRotation = MOTOR_STEPS * MICROSTEPS * 2; // motor steps to make the platform rotate one time
-bool toggle_pen = false;
-
-const int minPosition = 60;  // Minimum servo position
-const int maxPosition = 120; // Maximum servo position
-const int stepSize = 1;      // Step size for increment/decrement
-
-int currentPosition = 90;    // Initial servo position
-int stepDirection = 1;       // Initial step direction (1 for increment, -1 for decrement)
+int stepperRotation = MOTOR_STEPS * MICROSTEPS * 4;  // motor steps to make the platform rotate one time
+int stepDirection = 1;                               // Initial step direction (1 for increment, -1 for decrement)
 
 void loop() {
 
-  stepper.enable();
-  stepper.startMove(stepperRotation);
+  stepperX.enable();
+  stepperY.enable();
+  stepperX.startMove(stepperRotation);
+  stepperY.startMove(stepperRotation);
 
   unsigned wait_time_micros = 1;
   while (wait_time_micros > 0) {
-    wait_time_micros = stepper.nextAction();
-    int remaining = stepper.getStepsRemaining();
-    
-    // Update servo position
-    servo.write(currentPosition);
-
-    // Increment or decrement current position based on step direction
-    currentPosition += stepDirection * stepSize;
-
-    // Change step direction if limits are reached
-    if (currentPosition >= maxPosition || currentPosition <= minPosition) {
-      stepDirection = -stepDirection;
-    }
-    //Serial.println(new_pos);
+    int nextActionX = stepperX.nextAction();
+    int nextActionY = stepperY.nextAction();
+    wait_time_micros = nextActionX + nextActionY;
   }
   delay(500);
-  stepper.disable();
+  stepperX.disable();
+  stepperY.disable();
 }

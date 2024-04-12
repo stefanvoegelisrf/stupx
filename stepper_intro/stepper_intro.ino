@@ -18,7 +18,7 @@
 
 // Motor steps per revolution. Most steppers are 200 steps or 1.8 degrees/step
 #define MOTOR_STEPS 200
-#define RPM 120
+#define RPM 30
 
 // Since microstepping is set externally, make sure this matches the selected mode
 // Set the jumper to middle position when using MICROSTEPS 4, no jumper = MICROSTEPS 1
@@ -66,13 +66,13 @@ void loop() {
   // Moving motor one full revolution using the degree notation
 
   int totalRotation = 0;
-  while (totalRotation < 180) {
+  while (totalRotation < 90) {
     stepperX.rotate(1);
     stepperY.rotate(1);
     totalRotation++;
   }
 
-  totalRotation=0
+  totalRotation = 0;
 
 
   // pause and allow the motor to be moved by hand
